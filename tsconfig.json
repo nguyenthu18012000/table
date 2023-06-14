@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@components/*": ["./src/app/components/*"],
+      "@enums/*": ["./src/app/enums/*"],
+      "@helpers/*": ["./src/app/helpers/*"],
+      "@constants/*": ["./src/app/constants/*"],
+      "@pages/*": ["./src/app/pages/*"],
+      "@services/*": ["./src/app/services/*"],
+      "@components": ["./src/app/components/"],
+      "@enums": ["./src/app/enums/"],
+      "@helpers": ["./src/app/helpers/"],
+      "@constants": ["./src/app/constants/"],
+      "@pages": ["./src/app/pages/"],
+      "@services": ["./src/app/services/"]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
