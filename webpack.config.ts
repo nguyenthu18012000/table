@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: "./src/app/index.tsx",
@@ -34,6 +35,16 @@ module.exports = {
         }
       },
       {
+        test: /\.s[ac]ss$/i,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          'css-loader',
+          'sass-loader',
+        ],
+      },
+      {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
       }
@@ -62,6 +73,9 @@ module.exports = {
       filename: 'robots.txt',
       template: 'src/assets/robots.txt',
       inject: false,
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
     }),
   ]
 };

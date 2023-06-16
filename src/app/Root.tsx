@@ -1,16 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { Test } from './pages/test';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Tables } from '@pages/table';
+import 'antd/dist/reset.css';
 
 const Root = () => {
   return (
-    // https://stackoverflow.com/questions/69866581/property-exact-does-not-exist-on-type
-
-    // <Test />
-    // <div>ádflk;ádfalsdfkjasd;fljk</div>
     <BrowserRouter>
         <Routes>
-            <Route path='/abc' Component={Test} />
+          <Route path='/' Component={Tables} />
         </Routes>
     </BrowserRouter>
   )
