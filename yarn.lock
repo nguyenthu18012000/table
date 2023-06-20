@@ -1947,6 +1947,19 @@
   resolved "https://repo.huaweicloud.com/repository/npm/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
+"@material/dom@^8.0.0":
+  version "8.0.0"
+  resolved "https://repo.huaweicloud.com/repository/npm/@material/dom/-/dom-8.0.0.tgz#2bc70017d1608c3107a1a255066d2b727b7e605d"
+  integrity sha512-Y+sGqsyeFEu2whqdQ++LzXwmoRzhG3nEiPPwtX/Fgqrfdy7nyG1tvLXT+P+PLMDM6xO/H5+yjPV5OLFpKJjiIg==
+  dependencies:
+    "@material/feature-targeting" "^8.0.0"
+    tslib "^1.9.3"
+
+"@material/feature-targeting@^8.0.0":
+  version "8.0.0"
+  resolved "https://repo.huaweicloud.com/repository/npm/@material/feature-targeting/-/feature-targeting-8.0.0.tgz#bf01d08157a87c3900f66c493f616e81e9017ebd"
+  integrity sha512-xMJ9RmnOQCLPB6bD0xS0p6NF36vKNkjoPQt8aOoimtBlhSOba68+5jeX/qEQYZgOG4jf0SnWq833gAxx61Ni6g==
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://repo.huaweicloud.com/repository/npm/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz#dbf733a965ca47b1973177dc0bb6c889edcfb129"
@@ -2061,6 +2074,32 @@
   version "1.6.2"
   resolved "https://repo.huaweicloud.com/repository/npm/@remix-run/router/-/router-1.6.2.tgz#bbe75f8c59e0b7077584920ce2cc76f8f354934d"
   integrity sha512-LzqpSrMK/3JBAVBI9u3NWtOhWNw5AMQfrUFYB0+bDHTSw17z++WJLsPsxAuK+oSddsxk4d7F/JcdDPM1M5YAhA==
+
+"@rmwc/base@^8.0.8":
+  version "8.0.8"
+  resolved "https://repo.huaweicloud.com/repository/npm/@rmwc/base/-/base-8.0.8.tgz#8111a9d02618376ae143ff802ff19f200ec1de4d"
+  integrity sha512-5+nTOH9Q/jsIw+414YiaDemTJ3NA5rbRybocfDe9/2ySdc6TQ1pL8miES5KegSht9kWSExojm0/gtScKdHmUSQ==
+  dependencies:
+    "@material/dom" "^8.0.0"
+    "@rmwc/types" "^8.0.8"
+    "@types/classnames" "^2.3.1"
+    classnames "^2.3.1"
+    hyperform "^0.11.0"
+    mutation-observer "^1.0.3"
+    tslib "^2.3.0"
+
+"@rmwc/circular-progress@^8.0.8":
+  version "8.0.8"
+  resolved "https://repo.huaweicloud.com/repository/npm/@rmwc/circular-progress/-/circular-progress-8.0.8.tgz#b6d7501817be8ce14ce4570b7a2930acc04f1e04"
+  integrity sha512-KEEcPA2Immh5eJ9KSn5tNQqqM00XOtMOki4gLY5R7Khh6VZ7w9/iwq8AMzwyzwFXxfn/MzbN+eFv9pl+HPgESg==
+  dependencies:
+    "@rmwc/base" "^8.0.8"
+    "@rmwc/types" "^8.0.8"
+
+"@rmwc/types@^8.0.8":
+  version "8.0.8"
+  resolved "https://repo.huaweicloud.com/repository/npm/@rmwc/types/-/types-8.0.8.tgz#1debf1051a325576236a14a87c2e71209c67d663"
+  integrity sha512-MQFR8nZRdMIb+uI4+E8LYGytKmM+e1dqcQgfbhe+7n6Wm9yXJR+9IRZSw0MJRYi9TykgEHQKcz7Q2y5QeXpyGQ==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -2348,6 +2387,13 @@
   integrity sha512-p7ienRMiS41Nu2/igbJxxLDWrSZ0WxM8UQgCeO9KhoVF7cOVFkrKsiDr1EsJIla8vV3oEEjGcz11jc5yimhzZw==
   dependencies:
     "@types/node" "*"
+
+"@types/classnames@^2.3.1":
+  version "2.3.1"
+  resolved "https://repo.huaweicloud.com/repository/npm/@types/classnames/-/classnames-2.3.1.tgz#3c2467aa0f1a93f1f021e3b9bcf938bd5dfdc0dd"
+  integrity sha512-zeOWb0JGBoVmlQoznvqXbE0tEC/HONsnoUNH19Hc96NFsTAwTXbTqb8FMYkru1F/iqp7a18Ws3nWJvtA1sHD1A==
+  dependencies:
+    classnames "*"
 
 "@types/connect-history-api-fallback@^1.3.5":
   version "1.5.0"
@@ -3718,7 +3764,7 @@ cjs-module-lexer@^1.0.0:
   resolved "https://repo.huaweicloud.com/repository/npm/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz#9f84ba3244a512f3a54e5277e8eef4c489864e40"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
 
-classnames@2.x, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6, classnames@^2.3.1, classnames@^2.3.2:
+classnames@*, classnames@2.x, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6, classnames@^2.3.1, classnames@^2.3.2:
   version "2.3.2"
   resolved "https://repo.huaweicloud.com/repository/npm/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
@@ -5672,6 +5718,11 @@ human-signals@^2.1.0:
   resolved "https://repo.huaweicloud.com/repository/npm/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
+hyperform@^0.11.0:
+  version "0.11.0"
+  resolved "https://repo.huaweicloud.com/repository/npm/hyperform/-/hyperform-0.11.0.tgz#4edb189b99a613f333ef9e0a826b892d6f086633"
+  integrity sha512-HFry1hgItOzFmKXNgAh/yBrULtI/j8DqqnH8V28jVQDxHFjH1cPLl+JDxoVtPoJnO8Yti+MAGubio7wGU6qXGg==
+
 iconv-lite@0.4.24:
   version "0.4.24"
   resolved "https://repo.huaweicloud.com/repository/npm/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -7095,6 +7146,11 @@ multicast-dns@^7.2.5:
   dependencies:
     dns-packet "^5.2.2"
     thunky "^1.0.2"
+
+mutation-observer@^1.0.3:
+  version "1.0.3"
+  resolved "https://repo.huaweicloud.com/repository/npm/mutation-observer/-/mutation-observer-1.0.3.tgz#42e9222b101bca82e5ba9d5a7acf4a14c0f263d0"
+  integrity sha512-M/O/4rF2h776hV7qGMZUH3utZLO/jK7p8rnNgGkjKUw8zCGjRQPxB8z6+5l8+VjRUQ3dNYu4vjqXYLr+U8ZVNA==
 
 mz@^2.7.0:
   version "2.7.0"
@@ -9842,12 +9898,12 @@ tsconfig-paths@^3.14.1:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@^1.8.1:
+tslib@^1.8.1, tslib@^1.9.3:
   version "1.14.1"
   resolved "https://repo.huaweicloud.com/repository/npm/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.3:
+tslib@^2.0.3, tslib@^2.3.0:
   version "2.5.3"
   resolved "https://repo.huaweicloud.com/repository/npm/tslib/-/tslib-2.5.3.tgz#24944ba2d990940e6e982c4bea147aba80209913"
   integrity sha512-mSxlJJwl3BMEQCUNnxXBU9jP4JBktcEGhURcPR6VQVlnP0FdDEsIaz0C35dXNGLyRfrATNofF0F5p2KPxQgB+w==

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import '@pages/style.scss';
 import CellComponent from "@pages/CellComponent";
+import { CircularProgress } from "@rmwc/circular-progress";
+import '@rmwc/circular-progress/styles';
 
 const randomCk = () => {
   let result = '';
@@ -54,7 +56,7 @@ const columns: ColumnsType<DataType> = [
     title: 'Mã CK',
     dataIndex: 'maCk',
     width: '48px',
-    fixed: 'left',
+    // fixed: 'left',
     render(value, record, index) {
       return <CellComponent style={(Math.floor(Math.random()*2000)%3).toString()} value={value} />
     },
@@ -289,49 +291,88 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i,
-    maCk: randomCk(),
-    tran: randomNumber(),
-    san: randomNumber(),
-    tc: randomNumber(),
-    duMuaGia3: randomNumber(),
-    duMuaKl3: randomNumber(),
-    duMuaGia2: randomNumber(),
-    duMuaKl2: randomNumber(),
-    duMuaGia1: randomNumber(),
-    duMuaKl1: randomNumber(),
-    khopLenhGia: randomNumber(),
-    khopLenhPercent: Math.round(Math.random()*2) + '%',
-    khopLenhKl: randomNumber(),
-    duBanGia1: randomNumber(),
-    duBanKl1: randomNumber(),
-    duBanGia2: randomNumber(),
-    duBanKl2: randomNumber(),
-    duBanGia3: randomNumber(),
-    duBanKl3: randomNumber(),
-    tongKl: randomNumber(),
-    giaCao: randomNumber(),
-    giaThap: randomNumber(),
-    giaTb: randomNumber(),
-    nnMua: randomNumber(),
-    nnBan: randomNumber(),
-  });
-}
-
 export const Tables = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [dataTable, setDataTable] = useState<DataType[]>([]);
+
+  const loadMore = () => {
+    if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement?.scrollHeight) {
+      console.log(dataTable.length);
+      if (dataTable.length < 1000) {
+        setIsLoading(true);
+        createData();
+      }
+    }
+  }
+
+  const createData = () => {
+    let dataTableClone = [...dataTable];
+    let length = dataTableClone.length;
+    for (let i = 0; i < 100; i++) {
+      dataTableClone.push({
+        key: length + i,
+        maCk: randomCk(),
+        tran: randomNumber(),
+        san: randomNumber(),
+        tc: randomNumber(),
+        duMuaGia3: randomNumber(),
+        duMuaKl3: randomNumber(),
+        duMuaGia2: randomNumber(),
+        duMuaKl2: randomNumber(),
+        duMuaGia1: randomNumber(),
+        duMuaKl1: randomNumber(),
+        khopLenhGia: randomNumber(),
+        khopLenhPercent: Math.round(Math.random()*2) + '%',
+        khopLenhKl: randomNumber(),
+        duBanGia1: randomNumber(),
+        duBanKl1: randomNumber(),
+        duBanGia2: randomNumber(),
+        duBanKl2: randomNumber(),
+        duBanGia3: randomNumber(),
+        duBanKl3: randomNumber(),
+        tongKl: randomNumber(),
+        giaCao: randomNumber(),
+        giaThap: randomNumber(),
+        giaTb: randomNumber(),
+        nnMua: randomNumber(),
+        nnBan: randomNumber(),
+      });
+    }
+
+    setDataTable(dataTableClone);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    createData();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', loadMore);
+
+    return () => {
+      window.removeEventListener('scroll', loadMore);
+    }
+  }, [dataTable]);
+
   return (
-    <Table
-      rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' :  'table-row-dark'}
-      columns={columns}
-      dataSource={data}
-      bordered
-      size="small"
-      pagination={false}
-      sticky
-      scroll={{ x: 'calc(700px + 50%)'}}
-    />
+    <>
+      <Table
+        rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' :  'table-row-dark'}
+        columns={columns}
+        dataSource={dataTable}
+        bordered
+        size="small"
+        pagination={false}
+        sticky
+        scroll={{ x: 'calc(50%)'}}
+      />
+
+      {isLoading && 
+        <div style={{height:'80px'}}>
+          <CircularProgress size="small" />
+        </div>
+      }
+    </>
   );
 }

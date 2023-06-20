@@ -7,11 +7,6 @@
     text-transform: uppercase!important;
 }
 
-// .ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-sticky-holder >table >thead>tr>th.ant-table-cell {
-//     border-right: 1px solid rgb(40, 46, 55)!important;
-//     border-bottom: 1px solid rgb(40, 46, 55)!important;
-// }
-
 .ant-table-wrapper table {
     border-spacing: 0!important;
 }
@@ -24,13 +19,17 @@
     background-color: rgba(16, 16, 16, 1)!important;
 }
 
+.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-light:hover > td {
+    background-color: rgb(39, 39, 39)!important;
+}
+
 .ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-dark > td {
     background-color: black!important;
 }
 
-// .ant-table-cell .ant-table-cell-fix-left .ant-table-cell-fix-left-last {
-//     background-color: unset!important;
-// }
+.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-dark:hover > td {
+    background-color: rgb(39, 39, 39)!important;
+}
 
 .ant-table-cell {
     box-shadow: rgb(40, 46, 55) -1px -1px 0px!important;
@@ -39,17 +38,17 @@
     border-bottom: 1px solid rgb(40, 46, 55)!important;
 }
 
-.ant-table-tbody > tr.ant-table-row-level-0:hover > td {
-    background-color: rgb(39, 39, 39)!important;
-}
+// .ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+//     background-color: rgb(39, 39, 39)!important;
+// }
 
 // .ant-table-tbody > tr.ant-table-row-level-0 > td {
 //     background-color: rgb(39, 39, 39)!important;
 // }
 
-.ant-table-cell-row-hover {
-    background-color: rgb(39, 39, 39)!important;
-}
+// .ant-table-cell-row-hover {
+//     background-color: rgb(39, 39, 39)!important;
+// }
 
 .ant-table-row {
     font-size: 11px;
@@ -85,6 +84,10 @@
     background-color: inherit!important;
 }
 
-.greyColumn {
+.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-sticky-holder >table >thead>tr>th.greyColumn {
+    background-color: rgb(39, 39, 39)!important;
+}
+
+.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr > td.greyColumn {
     background-color: rgb(39, 39, 39)!important;
 }
