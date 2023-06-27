@@ -1,59 +1,55 @@
 
-.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-sticky-holder >table >thead>tr>th {
-    background-color: rgba(26, 26, 26, 1);
-    color: rgb(173, 179, 192);
-    font-size: 11px;
-    text-align: center;
-    text-transform: uppercase!important;
-}
+// .ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-sticky-holder >table >thead>tr>th {
+//     background-color: rgba(26, 26, 26, 1);
+//     color: rgb(173, 179, 192);
+//     font-size: 11px;
+//     text-align: center;
+//     text-transform: uppercase!important;
+// }
 
-.ant-table-wrapper table {
-    border-spacing: 0!important;
-}
-
-.ant-table-content {
-    background-color: rgb(39, 39, 39)!important;
-}
-
-.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-light > td {
-    background-color: rgba(16, 16, 16, 1)!important;
-}
-
-.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-light:hover > td {
-    background-color: rgb(39, 39, 39)!important;
-}
-
-.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-dark > td {
-    background-color: black!important;
-}
-
-.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-dark:hover > td {
-    background-color: rgb(39, 39, 39)!important;
-}
-
-.ant-table-cell {
-    box-shadow: rgb(40, 46, 55) -1px -1px 0px!important;
-    text-align: right;
-    border-right: 1px solid rgb(40, 46, 55)!important;
-    border-bottom: 1px solid rgb(40, 46, 55)!important;
-}
-
-// .ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+// .ant-table-content {
 //     background-color: rgb(39, 39, 39)!important;
 // }
 
-// .ant-table-tbody > tr.ant-table-row-level-0 > td {
+// .ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-light > td {
+//     background-color: rgba(16, 16, 16, 1)!important;
+// }
+
+// .ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-light:hover > td {
 //     background-color: rgb(39, 39, 39)!important;
 // }
 
-// .ant-table-cell-row-hover {
+// .ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-dark > td {
+//     background-color: black!important;
+// }
+
+// .ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr.table-row-dark:hover > td {
 //     background-color: rgb(39, 39, 39)!important;
 // }
 
-.ant-table-row {
-    font-size: 11px;
-    height: 28px!important;
-}
+// .ant-table-cell {
+//     box-shadow: rgb(40, 46, 55) -1px -1px 0px!important;
+//     text-align: right;
+//     border-right: 1px solid rgb(40, 46, 55)!important;
+//     border-bottom: 1px solid rgb(40, 46, 55)!important;
+// }
+
+// // .ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+// //     background-color: rgb(39, 39, 39)!important;
+// // }
+
+// // .ant-table-tbody > tr.ant-table-row-level-0 > td {
+// //     background-color: rgb(39, 39, 39)!important;
+// // }
+
+// // .ant-table-cell-row-hover {
+// //     background-color: rgb(39, 39, 39)!important;
+// // }
+
+// .ant-table-row {
+//     font-size: 11px;
+//     height: 28px!important;
+// }
 
 .ant-table-tbody > tr > td{
     padding: 0 6px 0 0!important;
@@ -79,15 +75,112 @@
     color: rgb(255, 55, 55);
 }
 
+.white-cell {
+    color: rgb(255, 255, 255);
+}
+
 .bold-cell {
-    font-weight: 400;
-    background-color: inherit!important;
+    font-weight: 600;
 }
 
-.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-sticky-holder >table >thead>tr>th.greyColumn {
-    background-color: rgb(39, 39, 39)!important;
+table {
+    position: relative;
+    font-size: 11px;
+    width: 100%;
+
+    thead {
+        color: rgb(173, 179, 192);
+        background-color: rgb(28, 26, 41);
+        position: sticky;
+        top: 0;
+
+        th {
+            border-right: 1px solid rgb(53, 54, 65);
+            position: relative;
+        }
+        
+        .group-header {
+            box-shadow: inset 0 -1px 0 rgb(53, 54, 65);
+            height: 30px;
+        }
+
+        .single-header {
+            box-shadow: inset 0 -1px 0 rgb(53, 54, 65);
+            height: 30px;
+        }
+
+        .single-header-top {
+            height: 30px;
+        }
+
+        .single-header-bottom {
+            height: 30px;
+            position: absolute;
+            top: -10px;
+        }
+    }
+        
+    tbody {
+        border-bottom: 1px solid rgb(40, 46, 55);
+        background-color: rgb(42, 38, 60);
+
+        .odd-row {
+            background-color: rgb(23, 18, 37);
+        }
+
+        .even-row {
+            background-color: rgb(5, 4, 14);
+        }
+
+        tr:hover {
+            background-color: rgb(53, 54, 65)!important;
+        }
+        
+        td {
+            height: 28px;
+            padding: 0;
+            border-bottom: 1px solid rgb(53, 54, 65);
+            border-right: 1px solid rgb(53, 54, 65);
+        }
+    } 
 }
 
-.ant-table-wrapper .ant-table.ant-table-bordered >.ant-table-container >.ant-table-body >table > tbody > tr > td.greyColumn {
-    background-color: rgb(39, 39, 39)!important;
+.greyColumn {
+    background-color: rgb(42,38,60);
+}
+
+.align-header-right {
+    right: 0;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.width-90 {
+    min-width: 90px;
+}
+
+.width-72 {
+    min-width: 72px;
+}
+
+.width-70 {
+    min-width: 70px;
+}
+
+.width-50 {
+    min-width: 50px;
+}
+
+.width-48 {
+    min-width: 48px;
+}
+
+.width-40 {
+    min-width: 40px;
+}
+
+.width-24 {
+    min-width: 24px;
 }
