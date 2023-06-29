@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "@babel/preset-typescript": "^7.22.5",
+    "@faker-js/faker": "^7.6.0",
     "@rmwc/circular-progress": "^8.0.8",
+    "@tanstack/react-query": "4.16.1",
     "@tanstack/react-table": "^8.9.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -19,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
+    "react-virtual": "^2.10.4",
     "sass": "^1.63.3",
     "scss": "^0.2.4",
     "ts-loader": "^9.4.3",
