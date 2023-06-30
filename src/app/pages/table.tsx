@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import '@pages/style.scss';
 import {
   createColumnHelper,
@@ -6,7 +6,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { CircularProgress } from "@rmwc/circular-progress";
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { useInfiniteQuery } from 'react-query'
 
 type DataTable = {
   pin: any;
@@ -38,7 +39,6 @@ type DataTable = {
   dtnnRoom: string;
 }
 
-const defaultData: DataTable[] = []
 const randomCk = () => {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -55,7 +55,8 @@ const randomNumber = () => {
   return ((Math.round(Math.random() * 9000) + 1000) / 100).toFixed(2);
 }
 
-for (let i = 0; i < 50; i++) {
+const defaultData: DataTable[] = []
+for (let i = 0; i < 1000; i++) {
   defaultData.push({
     pin: null,
     ck: randomCk(),
@@ -244,74 +245,96 @@ const columns = [
   }),
 ]
 
+async function fetchServerPage(
+  limit: number,
+  offset: number = 0,
+): Promise<{ rows: string[]; nextOffset: number }> {
+  const rows = new Array(limit)
+    .fill(0)
+    .map((e, i) => `Async loaded row #${i + offset * limit}`)
+
+  await new Promise((r) => setTimeout(r, 500))
+
+  return { rows, nextOffset: offset + 1 }
+}
+
 export const Tables = () => {
   const [data, setData] = useState<DataTable[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [numberRow, setNumberRow] = useState<number>(100);
+  const [heightDiv, setHeightDiv] = useState<number>(0);
+  
 
   const loadMore = () => {
-    console.log('aklsjdhf')
     if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement?.scrollHeight ||
       window.innerHeight + document.documentElement.scrollTop - 17 === document.scrollingElement?.scrollHeight) {
       if (data.length < 1000) {
-        setIsLoading(true);
         createData();
-        setIsLoading(false);
       }
     }
   }
 
   const createData = () => {
-    let dataTableClone = [...data];
-    for (let i = 0; i < 50; i++) {
-      dataTableClone.push({
-        pin: null,
-        ck: randomCk(),
-        tran: randomNumber(),
-        san: randomNumber(),
-        tc: randomNumber(),
-        benMuaGia3: randomNumber(),
-        benMuaKl3: randomNumber(),
-        benMuaGia2: randomNumber(),
-        benMuaKl2: randomNumber(),
-        benMuaGia1: randomNumber(),
-        benMuaKl1: randomNumber(),
-        khopLenhGia: randomNumber(),
-        khopLenh1: randomNumber(),
-        khopLenhPercent: Math.round(Math.random()*2) + '%',
-        khopLenhKl: randomNumber(),
-        benBanGia1: randomNumber(),
-        benBanKl1: randomNumber(),
-        benBanGia2: randomNumber(),
-        benBanKl2: randomNumber(),
-        benBanGia3: randomNumber(),
-        benBanKl3: randomNumber(),
-        tongKl: randomNumber(),
-        giaCao: randomNumber(),
-        giaThap: randomNumber(),
-        dtnnMua: randomNumber(),
-        dtnnBan: randomNumber(),
-        dtnnRoom: randomNumber(),
-      });
-    }
+    // let dataTableClone = [...data];
+    // for (let i = 0; i < 1000; i++) {
+    //   dataTableClone.push({
+    //     pin: null,
+    //     ck: randomCk(),
+    //     tran: randomNumber(),
+    //     san: randomNumber(),
+    //     tc: randomNumber(),
+    //     benMuaGia3: randomNumber(),
+    //     benMuaKl3: randomNumber(),
+    //     benMuaGia2: randomNumber(),
+    //     benMuaKl2: randomNumber(),
+    //     benMuaGia1: randomNumber(),
+    //     benMuaKl1: randomNumber(),
+    //     khopLenhGia: randomNumber(),
+    //     khopLenh1: randomNumber(),
+    //     khopLenhPercent: Math.round(Math.random()*2) + '%',
+    //     khopLenhKl: randomNumber(),
+    //     benBanGia1: randomNumber(),
+    //     benBanKl1: randomNumber(),
+    //     benBanGia2: randomNumber(),
+    //     benBanKl2: randomNumber(),
+    //     benBanGia3: randomNumber(),
+    //     benBanKl3: randomNumber(),
+    //     tongKl: randomNumber(),
+    //     giaCao: randomNumber(),
+    //     giaThap: randomNumber(),
+    //     dtnnMua: randomNumber(),
+    //     dtnnBan: randomNumber(),
+    //     dtnnRoom: randomNumber(),
+    //   });
+    // }
 
-    if (data.length !== dataTableClone.length) {
-      setData(dataTableClone);
-    }
-    console.log(dataTableClone.length, data.length)
+    // if (data.length !== dataTableClone.length) {
+    //   setData(dataTableClone);
+    // }
+    console.log(data.length)
+
+    let currentData = defaultData.slice(0, numberRow);
+    setNumberRow(numberRow + 100);
+    console.log(currentData)
+    setData(currentData);
   }
 
   useEffect(() => {
-    createData();
+    // createData();
+    console.log(document.getElementById('container')?.offsetHeight);
+    console.log(window.outerHeight);
+    
+    
+    setHeightDiv(window.innerHeight);
   }, []);
 
-  useEffect(() => {
-    window.addEventListener('scroll', loadMore);
+  // useEffect(() => {
+  //   window.addEventListener('scroll', loadMore);
 
-    return () => {
-      console.log('remove event')
-      window.removeEventListener('scroll', loadMore);
-    }
-  }, [data]);
+  //   return () => {
+  //     window.removeEventListener('scroll', loadMore);
+  //   }
+  // }, [numberRow]);
 
   const greyColumn = [2, 3, 4, 11, 12, 13, 14, 21, 22, 23]
   const textClass = ['red-cell', 'green-cell', 'yellow-cell', 'white-cell']
@@ -322,9 +345,59 @@ export const Tables = () => {
     getCoreRowModel: getCoreRowModel(),
   })
 
+
+  const {
+    status,
+    data: datas,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    'projects',
+    (ctx) => fetchServerPage(10, ctx.pageParam),
+    {
+      getNextPageParam: (_lastGroup, groups) => groups.length,
+    },
+  );
+
+  const allRows = datas ? datas.pages.flatMap((d) => d.rows) : []
+
+  const parentRef = React.useRef()
+
+  const rowVirtualizer = useVirtualizer({
+    count: hasNextPage ? allRows.length + 1 : allRows.length,
+    getScrollElement: () => parentRef.current as any,
+    estimateSize: () => 100,
+    overscan: 5,
+  })
+
+  React.useEffect(() => {
+    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse()
+
+    if (!lastItem) {
+      return
+    }
+
+    if (
+      lastItem.index >= allRows.length - 1 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage()
+    }
+  }, [
+    hasNextPage,
+    fetchNextPage,
+    allRows.length,
+    isFetchingNextPage,
+    rowVirtualizer.getVirtualItems(),
+  ])
+
   return (
-    <>
-      <table>
+    <div>
+      {/* <table>
         <thead>
           {table.getHeaderGroups().map((headerGroup, index) => (
             <tr key={headerGroup.id}>
@@ -349,7 +422,9 @@ export const Tables = () => {
             </tr>
           ))}
         </thead>
-        <tbody>
+        <tbody
+          // style={{height: '100%', overflow: 'scroll'}} onScroll={() => console.log('laksjdhf')} ref={ref.current}
+        >
           {table.getRowModel().rows.map((row, index) => (
             <tr key={row.id} className={index % 2 == 0 ? 'odd-row' : 'even-row'}>
               {row.getVisibleCells().map((cell, index) => {
@@ -366,13 +441,61 @@ export const Tables = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
 
-      {isLoading && 
-        <div style={{height:'80px'}}>
-          <CircularProgress size="small" />
-        </div>
-      }
-    </>
+      <div id="container" style={{height:'100%'}}>
+        {status === 'loading' ? (
+          <p>Loading...</p>
+        ) : status === 'error' ? (
+          <span>Error: {(error as Error).message}</span>
+        ) : (
+          <div
+            ref={parentRef as any}
+            className="List"
+            style={{
+              height: `${heightDiv}px`,
+              width: `100%`,
+              overflow: 'auto',
+            }}
+          >
+            <div
+              style={{
+                height: `${rowVirtualizer.getTotalSize()}px`,
+                width: '100%',
+                position: 'relative',
+              }}
+            >
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const isLoaderRow = virtualRow.index > allRows.length - 1
+                const post = allRows[virtualRow.index]
+
+                return (
+                  <div
+                    key={virtualRow.index}
+                    className={
+                      virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'
+                    }
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: `${virtualRow.size}px`,
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                  >
+                    {isLoaderRow
+                      ? hasNextPage
+                        ? 'Loading more...'
+                        : 'Nothing more to load'
+                      : post}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
