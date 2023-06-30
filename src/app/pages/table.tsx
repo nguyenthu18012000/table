@@ -11,7 +11,6 @@ import {
 import { CircularProgress } from "@rmwc/circular-progress";
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useVirtual } from 'react-virtual'
-import { faker } from '@faker-js/faker'
 
 const fetchSize = 50
 
@@ -288,7 +287,7 @@ const fetchData = (
   }
 }
 
-export const Table2 = () => {
+export const Tables = () => {
   const tableContainerRef = React.useRef<HTMLDivElement>(null)
   const columns = React.useMemo<ColumnDef<DataTable>[]>(
     () => [
@@ -455,6 +454,7 @@ export const Table2 = () => {
       async ({ pageParam = 0 }) => {
         const start = pageParam * fetchSize;
         const fetchedData = fetchData(start, fetchSize);
+        console.log('start',start)
         return fetchedData;
       },
       {
@@ -475,6 +475,10 @@ export const Table2 = () => {
     (containerRefElement?: HTMLDivElement | null) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement
+        console.log(scrollHeight, scrollTop, clientHeight)
+        console.log(scrollHeight - scrollTop - clientHeight)
+        console.log(isFetching)
+        console.log(totalFetched , totalDBRowCount)
         if (
           scrollHeight - scrollTop - clientHeight < 300 &&
           !isFetching &&
@@ -502,7 +506,7 @@ export const Table2 = () => {
   const rowVirtualizer = useVirtual({
     parentRef: tableContainerRef,
     size: rows.length,
-    overscan: 10,
+    overscan: 100,
   })
   const { virtualItems: virtualRows, totalSize } = rowVirtualizer
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0
@@ -517,8 +521,8 @@ export const Table2 = () => {
   return (
     <div
       className="container"
-      style={{height: '700px', overflow: 'auto'}}
-      onScroll={e => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+      // style={{height: '100%', overflow: 'auto'}}
+      // onScroll={e => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
       ref={tableContainerRef}
     >
       <table>
@@ -546,16 +550,19 @@ export const Table2 = () => {
             </tr>
           ))}
         </thead>
-        <tbody>
-          {/* {paddingTop > 0 && (
+        <tbody
+          style={{height: '100%', overflow: 'auto'}}
+          onScroll={e => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+        >
+          {paddingTop > 0 && (
             <tr>
               <td style={{ height: `${paddingTop}px` }} />
             </tr>
-          )} */}
-          {virtualRows.map((virtualRow, index) => {
+          )}
+          {virtualRows.map((virtualRow, indexRow) => {
             const row = rows[virtualRow.index] as Row<DataTable>
             return (
-              <tr key={row.id} className={index % 2 == 0 ? 'odd-row' : 'even-row'}>
+              <tr key={row.id} className={indexRow % 2 == 0 ? 'odd-row' : 'even-row'}>
                 {row.getVisibleCells().map((cell, index) => {
                   let backgroundClass = greyColumn.includes(index) ? 'greyColumn' : '';
                   let textColorClass = textClass[Math.round(Math.random()*1000) % 4];
@@ -565,7 +572,8 @@ export const Table2 = () => {
                       key={cell.id}
                       className={`${backgroundClass} ${textColorClass} bold-cell`}
                     >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {/* {flexRender(cell.column.columnDef.cell, cell.getContext())} */}
+                      {indexRow}
                     </td>
                   )
                 })}
@@ -574,7 +582,7 @@ export const Table2 = () => {
           })}
           {paddingBottom > 0 && (
             <tr>
-              <td style={{ height: `${paddingBottom}px` }} />
+              <td style={{ height: `${paddingBottom/20}px` }} />
             </tr>
           )}
         </tbody>
