@@ -31,9 +31,7 @@
 }
 
 table {
-    position: relative;
     font-size: 11px;
-    width: 100%;
 
     thead {
         color: rgb(173, 179, 192);
@@ -131,29 +129,3 @@ table {
 .width-24 {
     min-width: 24px;
 }
-
-html {
-    font-family: sans-serif;
-    font-size: 14px;
-  }
-  
-  .List {
-    border: 1px solid #e6e4dc;
-    max-width: 100%;
-  }
-  
-  .ListItemEven,
-  .ListItemOdd {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .ListItemEven {
-    background-color: #e6e4dc;
-  }
-  
-  button {
-    border: 1px solid gray;
-  }
-  

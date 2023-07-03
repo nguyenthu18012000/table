@@ -248,10 +248,38 @@ const columns = [
 async function fetchServerPage(
   limit: number,
   offset: number = 0,
-): Promise<{ rows: string[]; nextOffset: number }> {
+): Promise<{ rows: DataTable[]; nextOffset: number }> {
   const rows = new Array(limit)
     .fill(0)
-    .map((e, i) => `Async loaded row #${i + offset * limit}`)
+    .map((e, i) =>({
+      pin: null,
+      ck: randomCk(),
+      tran: randomNumber(),
+      san: randomNumber(),
+      tc: randomNumber(),
+      benMuaGia3: randomNumber(),
+      benMuaKl3: randomNumber(),
+      benMuaGia2: randomNumber(),
+      benMuaKl2: randomNumber(),
+      benMuaGia1: randomNumber(),
+      benMuaKl1: randomNumber(),
+      khopLenhGia: randomNumber(),
+      khopLenh1: randomNumber(),
+      khopLenhPercent: Math.round(Math.random()*2) + '%',
+      khopLenhKl: randomNumber(),
+      benBanGia1: randomNumber(),
+      benBanKl1: randomNumber(),
+      benBanGia2: randomNumber(),
+      benBanKl2: randomNumber(),
+      benBanGia3: randomNumber(),
+      benBanKl3: randomNumber(),
+      tongKl: randomNumber(),
+      giaCao: randomNumber(),
+      giaThap: randomNumber(),
+      dtnnMua: randomNumber(),
+      dtnnBan: randomNumber(),
+      dtnnRoom: randomNumber(),
+    }))
 
   await new Promise((r) => setTimeout(r, 500))
 
@@ -260,81 +288,12 @@ async function fetchServerPage(
 
 export const Tables = () => {
   const [data, setData] = useState<DataTable[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [numberRow, setNumberRow] = useState<number>(100);
   const [heightDiv, setHeightDiv] = useState<number>(0);
-  
 
-  const loadMore = () => {
-    if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement?.scrollHeight ||
-      window.innerHeight + document.documentElement.scrollTop - 17 === document.scrollingElement?.scrollHeight) {
-      if (data.length < 1000) {
-        createData();
-      }
-    }
-  }
-
-  const createData = () => {
-    // let dataTableClone = [...data];
-    // for (let i = 0; i < 1000; i++) {
-    //   dataTableClone.push({
-    //     pin: null,
-    //     ck: randomCk(),
-    //     tran: randomNumber(),
-    //     san: randomNumber(),
-    //     tc: randomNumber(),
-    //     benMuaGia3: randomNumber(),
-    //     benMuaKl3: randomNumber(),
-    //     benMuaGia2: randomNumber(),
-    //     benMuaKl2: randomNumber(),
-    //     benMuaGia1: randomNumber(),
-    //     benMuaKl1: randomNumber(),
-    //     khopLenhGia: randomNumber(),
-    //     khopLenh1: randomNumber(),
-    //     khopLenhPercent: Math.round(Math.random()*2) + '%',
-    //     khopLenhKl: randomNumber(),
-    //     benBanGia1: randomNumber(),
-    //     benBanKl1: randomNumber(),
-    //     benBanGia2: randomNumber(),
-    //     benBanKl2: randomNumber(),
-    //     benBanGia3: randomNumber(),
-    //     benBanKl3: randomNumber(),
-    //     tongKl: randomNumber(),
-    //     giaCao: randomNumber(),
-    //     giaThap: randomNumber(),
-    //     dtnnMua: randomNumber(),
-    //     dtnnBan: randomNumber(),
-    //     dtnnRoom: randomNumber(),
-    //   });
-    // }
-
-    // if (data.length !== dataTableClone.length) {
-    //   setData(dataTableClone);
-    // }
-    console.log(data.length)
-
-    let currentData = defaultData.slice(0, numberRow);
-    setNumberRow(numberRow + 100);
-    console.log(currentData)
-    setData(currentData);
-  }
 
   useEffect(() => {
-    // createData();
-    console.log(document.getElementById('container')?.offsetHeight);
-    console.log(window.outerHeight);
-    
-    
     setHeightDiv(window.innerHeight);
   }, []);
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', loadMore);
-
-  //   return () => {
-  //     window.removeEventListener('scroll', loadMore);
-  //   }
-  // }, [numberRow]);
 
   const greyColumn = [2, 3, 4, 11, 12, 13, 14, 21, 22, 23]
   const textClass = ['red-cell', 'green-cell', 'yellow-cell', 'white-cell']
@@ -347,16 +306,13 @@ export const Tables = () => {
 
 
   const {
-    status,
     data: datas,
-    error,
-    isFetching,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
     'projects',
-    (ctx) => fetchServerPage(10, ctx.pageParam),
+    (ctx) => fetchServerPage(50, ctx.pageParam),
     {
       getNextPageParam: (_lastGroup, groups) => groups.length,
     },
@@ -369,23 +325,28 @@ export const Tables = () => {
   const rowVirtualizer = useVirtualizer({
     count: hasNextPage ? allRows.length + 1 : allRows.length,
     getScrollElement: () => parentRef.current as any,
-    estimateSize: () => 100,
-    overscan: 5,
+    estimateSize: () => 40,
+    overscan: 50,
   })
+  console.log(parentRef.current);
+  
 
   React.useEffect(() => {
     const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse()
-
     if (!lastItem) {
       return
     }
+    
+    console.log(lastItem.index, allRows.length - 1 ,
+      hasNextPage ,
+      !isFetchingNextPage);
 
     if (
       lastItem.index >= allRows.length - 1 &&
       hasNextPage &&
       !isFetchingNextPage
     ) {
-      fetchNextPage()
+      fetchNextPage();
     }
   }, [
     hasNextPage,
@@ -396,10 +357,18 @@ export const Tables = () => {
   ])
 
   return (
-    <div>
-      {/* <table>
+    <div
+      ref={parentRef as any}
+      className="List"
+      style={{
+        height: `${heightDiv}px`,
+        width: `100%`,
+        overflow: 'auto',
+      }}
+    >
+      <table>
         <thead>
-          {table.getHeaderGroups().map((headerGroup, index) => (
+          {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
                 <th
@@ -422,80 +391,34 @@ export const Tables = () => {
             </tr>
           ))}
         </thead>
-        <tbody
-          // style={{height: '100%', overflow: 'scroll'}} onScroll={() => console.log('laksjdhf')} ref={ref.current}
-        >
-          {table.getRowModel().rows.map((row, index) => (
-            <tr key={row.id} className={index % 2 == 0 ? 'odd-row' : 'even-row'}>
-              {row.getVisibleCells().map((cell, index) => {
+        <tbody>
+          {rowVirtualizer.getVirtualItems().map((row) => {
+            let post = [];
+            if (allRows[row.index] !== null && allRows[row.index] !== undefined) {
+              post = Object.values(allRows[row.index])
+            }
+            return <tr
+              key={row.index}
+              className={row.index % 2 == 0 ? 'odd-row' : 'even-row'}
+              // style={{
+              //   height: '28px'
+              // }}
+            >
+              {post.map((cell, index) => {
                 let backgroundClass = greyColumn.includes(index) ? 'greyColumn' : '';
                 let textColorClass = textClass[Math.round(Math.random()*1000)%4];
                 return <td
-                  key={cell.id}
+                  key={index}
                   className={`${backgroundClass} ${textColorClass} bold-cell`}
                 >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {cell}
                 </td>
               }
               )}
             </tr>
-          ))}
+          })}
         </tbody>
-      </table> */}
-
-      <div id="container" style={{height:'100%'}}>
-        {status === 'loading' ? (
-          <p>Loading...</p>
-        ) : status === 'error' ? (
-          <span>Error: {(error as Error).message}</span>
-        ) : (
-          <div
-            ref={parentRef as any}
-            className="List"
-            style={{
-              height: `${heightDiv}px`,
-              width: `100%`,
-              overflow: 'auto',
-            }}
-          >
-            <div
-              style={{
-                height: `${rowVirtualizer.getTotalSize()}px`,
-                width: '100%',
-                position: 'relative',
-              }}
-            >
-              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                const isLoaderRow = virtualRow.index > allRows.length - 1
-                const post = allRows[virtualRow.index]
-
-                return (
-                  <div
-                    key={virtualRow.index}
-                    className={
-                      virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'
-                    }
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: `${virtualRow.size}px`,
-                      transform: `translateY(${virtualRow.start}px)`,
-                    }}
-                  >
-                    {isLoaderRow
-                      ? hasNextPage
-                        ? 'Loading more...'
-                        : 'Nothing more to load'
-                      : post}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-      </div>
+      </table>
     </div>
   )
 }
