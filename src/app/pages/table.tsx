@@ -55,39 +55,6 @@ const randomNumber = () => {
   return ((Math.round(Math.random() * 9000) + 1000) / 100).toFixed(2);
 }
 
-const defaultData: DataTable[] = []
-for (let i = 0; i < 1000; i++) {
-  defaultData.push({
-    pin: null,
-    ck: randomCk(),
-    tran: randomNumber(),
-    san: randomNumber(),
-    tc: randomNumber(),
-    benMuaGia3: randomNumber(),
-    benMuaKl3: randomNumber(),
-    benMuaGia2: randomNumber(),
-    benMuaKl2: randomNumber(),
-    benMuaGia1: randomNumber(),
-    benMuaKl1: randomNumber(),
-    khopLenhGia: randomNumber(),
-    khopLenh1: randomNumber(),
-    khopLenhPercent: Math.round(Math.random()*2) + '%',
-    khopLenhKl: randomNumber(),
-    benBanGia1: randomNumber(),
-    benBanKl1: randomNumber(),
-    benBanGia2: randomNumber(),
-    benBanKl2: randomNumber(),
-    benBanGia3: randomNumber(),
-    benBanKl3: randomNumber(),
-    tongKl: randomNumber(),
-    giaCao: randomNumber(),
-    giaThap: randomNumber(),
-    dtnnMua: randomNumber(),
-    dtnnBan: randomNumber(),
-    dtnnRoom: randomNumber(),
-  });
-}
-
 const columnHelper = createColumnHelper<DataTable>()
 const columns = [
   columnHelper.group({
@@ -249,6 +216,8 @@ async function fetchServerPage(
   limit: number,
   offset: number = 0,
 ): Promise<{ rows: DataTable[]; nextOffset: number }> {
+  console.log('offset======',offset);
+  
   const rows = new Array(limit)
     .fill(0)
     .map((e, i) =>({
@@ -280,20 +249,13 @@ async function fetchServerPage(
       dtnnBan: randomNumber(),
       dtnnRoom: randomNumber(),
     }))
-
-  await new Promise((r) => setTimeout(r, 500))
+console.log('rows ========', rows);
 
   return { rows, nextOffset: offset + 1 }
 }
 
 export const Tables = () => {
-  const [data, setData] = useState<DataTable[]>([]);
-  const [heightDiv, setHeightDiv] = useState<number>(0);
-
-
-  useEffect(() => {
-    setHeightDiv(window.innerHeight);
-  }, []);
+  const data:DataTable[] = [];
 
   const greyColumn = [2, 3, 4, 11, 12, 13, 14, 21, 22, 23]
   const textClass = ['red-cell', 'green-cell', 'yellow-cell', 'white-cell']
@@ -303,7 +265,6 @@ export const Tables = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
-
 
   const {
     data: datas,
@@ -325,23 +286,26 @@ export const Tables = () => {
   const rowVirtualizer = useVirtualizer({
     count: hasNextPage ? allRows.length + 1 : allRows.length,
     getScrollElement: () => parentRef.current as any,
-    estimateSize: () => 40,
+    estimateSize: () => 28,
     overscan: 50,
   })
-  console.log(parentRef.current);
-  
 
   React.useEffect(() => {
     const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse()
     if (!lastItem) {
       return
     }
+    console.log('allrow=====',allRows.length);
+    console.log('álkdjfhasdkfj====',[...rowVirtualizer.getVirtualItems()].reverse());
     
-    console.log(lastItem.index, allRows.length - 1 ,
-      hasNextPage ,
-      !isFetchingNextPage);
+    
+    console.log(lastItem.index, allRows.length - 1, hasNextPage,!isFetchingNextPage,
+      lastItem.index >= allRows.length - 1);
+    
+      console.log(rowVirtualizer.getVirtualItems().length);
+      
 
-    if (
+    if ( allRows.length < 1000 &&
       lastItem.index >= allRows.length - 1 &&
       hasNextPage &&
       !isFetchingNextPage
@@ -351,74 +315,66 @@ export const Tables = () => {
   }, [
     hasNextPage,
     fetchNextPage,
-    allRows.length,
+    // allRows.length,
     isFetchingNextPage,
-    rowVirtualizer.getVirtualItems(),
+    // rowVirtualizer.getVirtualItems(),
   ])
 
   return (
-    <div
-      ref={parentRef as any}
-      className="List"
-      style={{
-        height: `${heightDiv}px`,
-        width: `100%`,
-        overflow: 'auto',
-      }}
-    >
-      <table>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th
-                  key={header.id}
-                  className={
-                    header.colSpan > 1
-                    ? 'group-header'
-                    : headerGroup.id == '1' ? 'single-header' : ''
-                  }
-                  colSpan={header.colSpan}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {rowVirtualizer.getVirtualItems().map((row) => {
-            let post = [];
-            if (allRows[row.index] !== null && allRows[row.index] !== undefined) {
-              post = Object.values(allRows[row.index])
-            }
-            return <tr
-              key={row.index}
-              className={row.index % 2 == 0 ? 'odd-row' : 'even-row'}
-              // style={{
-              //   height: '28px'
-              // }}
-            >
-              {post.map((cell, index) => {
-                let backgroundClass = greyColumn.includes(index) ? 'greyColumn' : '';
-                let textColorClass = textClass[Math.round(Math.random()*1000)%4];
-                return <td
-                  key={index}
-                  className={`${backgroundClass} ${textColorClass} bold-cell`}
-                >
-                  {cell}
-                </td>
-              }
-              )}
-            </tr>
-          })}
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead>
+        {table.getHeaderGroups().map(headerGroup => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map(header => (
+              <th
+                key={header.id}
+                className={
+                  header.colSpan > 1
+                  ? 'group-header'
+                  : headerGroup.id == '1' ? 'single-header' : ''
+                }
+                colSpan={header.colSpan}
+              >
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody
+        ref={parentRef as any}
+        className="container"
+        style={{
+          blockSize: `${rowVirtualizer.getTotalSize() - 28}px`,
+        }}
+      >
+        {rowVirtualizer.getVirtualItems().map((row) => {
+          let dataRow = [];
+          if (allRows[row.index] !== null && allRows[row.index] !== undefined) {
+            dataRow = Object.values(allRows[row.index])
+          }
+          return <tr
+            key={row.index}
+            className={row.index % 2 == 0 ? 'odd-row' : 'even-row'}
+          >
+            {dataRow.map((cell, index) => {
+              let backgroundClass = greyColumn.includes(index) ? 'greyColumn' : '';
+              let textColorClass = textClass[Math.round(Math.random()*1000)%4];
+              return <td
+                key={index}
+                className={`${backgroundClass} ${textColorClass} bold-cell`}
+              >
+                {index == 0 ? row.index :cell}
+              </td>
+            })}
+          </tr>
+        })}
+      </tbody>
+    </table>
   )
 }
