@@ -6,7 +6,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { CircularProgress } from "@rmwc/circular-progress";
+import io from "socket.io-client";
+
+const host = "http://localhost:3000";
 
 type DataTable = {
   pin: any;
@@ -38,54 +40,6 @@ type DataTable = {
   dtnnRoom: string;
 }
 
-const defaultData: DataTable[] = []
-const randomCk = () => {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < 3) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-}
-
-const randomNumber = () => {
-  return ((Math.round(Math.random() * 9000) + 1000) / 100).toFixed(2);
-}
-
-for (let i = 0; i < 50; i++) {
-  defaultData.push({
-    pin: null,
-    ck: randomCk(),
-    tran: randomNumber(),
-    san: randomNumber(),
-    tc: randomNumber(),
-    benMuaGia3: randomNumber(),
-    benMuaKl3: randomNumber(),
-    benMuaGia2: randomNumber(),
-    benMuaKl2: randomNumber(),
-    benMuaGia1: randomNumber(),
-    benMuaKl1: randomNumber(),
-    khopLenhGia: randomNumber(),
-    khopLenh1: randomNumber(),
-    khopLenhPercent: Math.round(Math.random()*2) + '%',
-    khopLenhKl: randomNumber(),
-    benBanGia1: randomNumber(),
-    benBanKl1: randomNumber(),
-    benBanGia2: randomNumber(),
-    benBanKl2: randomNumber(),
-    benBanGia3: randomNumber(),
-    benBanKl3: randomNumber(),
-    tongKl: randomNumber(),
-    giaCao: randomNumber(),
-    giaThap: randomNumber(),
-    dtnnMua: randomNumber(),
-    dtnnBan: randomNumber(),
-    dtnnRoom: randomNumber(),
-  });
-}
 
 const columnHelper = createColumnHelper<DataTable>()
 const columns = [
@@ -246,16 +200,28 @@ const columns = [
 
 export const Tables = () => {
   const [data, setData] = useState<DataTable[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  const randomCk = () => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < 3) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+  }
+  
+  const randomNumber = () => {
+    return ((Math.round(Math.random() * 9000) + 1000) / 100).toFixed(2);
+  }
 
-  const loadMore = () => {
-    console.log('aklsjdhf')
-    if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement?.scrollHeight ||
-      window.innerHeight + document.documentElement.scrollTop - 17 === document.scrollingElement?.scrollHeight) {
-      if (data.length < 1000) {
-        setIsLoading(true);
+  const loadMore = async () => {
+    let scrollheight = document.scrollingElement?.scrollHeight;
+    if (scrollheight != undefined && data.length < 1000) {
+      if (window.innerHeight + document.documentElement.scrollTop > scrollheight - 400) {
         createData();
-        setIsLoading(false);
       }
     }
   }
@@ -297,36 +263,45 @@ export const Tables = () => {
     if (data.length !== dataTableClone.length) {
       setData(dataTableClone);
     }
-    console.log(dataTableClone.length, data.length)
   }
 
-  useEffect(() => {
-    createData();
-  }, []);
+  const socket = io(host);
 
-  useEffect(() => {
-    window.addEventListener('scroll', loadMore);
+  useEffect(() => {socket.on("sendDataServer", (dataGot) => {
+      setData(dataGot.data)
+      console.log(dataGot.data);
+    })
+    console.log('aaaaa')
+  }, [])
 
-    return () => {
-      console.log('remove event')
-      window.removeEventListener('scroll', loadMore);
-    }
-  }, [data]);
+  // useEffect(() => {
+    
+  //   console.log('âklsjdhflaksjhasdfkhjl')
+  //   createData();
+  // }, []);
 
-  const greyColumn = [2, 3, 4, 11, 12, 13, 14, 21, 22, 23]
-  const textClass = ['red-cell', 'green-cell', 'yellow-cell', 'white-cell']
+  // useEffect(() => {
+  //   window.addEventListener('scroll', loadMore);
+
+  //   return () => {
+  //     window.removeEventListener('scroll', loadMore);
+  //   }
+  // }, [data]);
+
+  const greyColumn = [2, 3, 4, 11, 12, 13, 14, 21, 22, 23];
+  const textClass = ['red-cell', 'green-cell', 'yellow-cell', 'white-cell'];
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
   return (
     <>
       <table>
         <thead>
-          {table.getHeaderGroups().map((headerGroup, index) => (
+          {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
                 <th
@@ -338,12 +313,7 @@ export const Tables = () => {
                   }
                   colSpan={header.colSpan}
                 >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                  {flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
             </tr>
@@ -354,25 +324,18 @@ export const Tables = () => {
             <tr key={row.id} className={index % 2 == 0 ? 'odd-row' : 'even-row'}>
               {row.getVisibleCells().map((cell, index) => {
                 let backgroundClass = greyColumn.includes(index) ? 'greyColumn' : '';
-                let textColorClass = textClass[Math.round(Math.random()*1000)%4];
+                let textColorClass = textClass[Math.round(Math.random() * 1000) % 4];
                 return <td
                   key={cell.id}
                   className={`${backgroundClass} ${textColorClass} bold-cell`}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
-              }
-              )}
+              })}
             </tr>
           ))}
         </tbody>
       </table>
-
-      {isLoading && 
-        <div style={{height:'80px'}}>
-          <CircularProgress size="small" />
-        </div>
-      }
     </>
-  )
+  );
 }
